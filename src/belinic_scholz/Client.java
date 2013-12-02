@@ -17,7 +17,8 @@ public class Client {
          //[2]
         if (System.getSecurityManager() == null) {
             System.setSecurityManager(new SecurityManager());
-            System.setProperty("java.security.policy","file:./java.policy");	//[1]
+            //System.setProperty("java.security.policy","file:./java.policy");	//[1]
+            //nicht noetig es soll mit der lokalen Policy funktionieren
         }
 
 
@@ -28,7 +29,7 @@ public class Client {
              BigDecimal pi = comp.pi(Integer.parseInt(args[1]));
              System.out.println(pi);
          } catch (Exception e) {
-             System.err.println("ComputePi exception:" + e.getMessage());
+             System.err.println("Naehere Informationen:" + e.getMessage());
          }
        
        //[2]
