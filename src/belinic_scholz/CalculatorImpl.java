@@ -10,17 +10,6 @@ public class CalculatorImpl implements Calculator {
     /** rounding mode to use during pi computation */
     private static final int roundingMode = BigDecimal.ROUND_HALF_EVEN;
 
-    /** digits of precision after the decimal point */
-    private final int digits;
-    
-    /**
-     * Construct a task to calculate pi to the specified
-     * precision.
-     */
-    public CalculatorImpl(int digits) {
-        this.digits = digits;
-    }
-
     /**
      * Calculate pi.
      * Compute the value of pi to the specified number of 
@@ -31,16 +20,18 @@ public class CalculatorImpl implements Calculator {
      *
      * and a power series expansion of arctan(x) to 
      * sufficient precision.
+     * @param anzahl_nachkommastellen Anzahl der Stellen nach dem Komma
+     * @return 
      */
     @Override
     public BigDecimal pi(int anzahl_nachkommastellen) {
         
-        int scale = digits + 5;
+        int scale = anzahl_nachkommastellen + 5;
         BigDecimal arctan1_5 = arctan(5, scale);
         BigDecimal arctan1_239 = arctan(239, scale);
         BigDecimal pi = arctan1_5.multiply(FOUR).subtract(arctan1_239).multiply(FOUR);
 
-        return pi.setScale(digits,BigDecimal.ROUND_HALF_UP);
+        return pi.setScale(anzahl_nachkommastellen,BigDecimal.ROUND_HALF_UP);
     }
    
     /**
