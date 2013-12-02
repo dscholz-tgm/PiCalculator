@@ -7,23 +7,41 @@ import java.rmi.server.UnicastRemoteObject;
 
 /**
  * @author Dominik
- * @version 0.1
+ * @version 0.2
  */
 public class Server implements Calculator {
     
     public static void main(String args[]) {
+        
+        //Parsen des Ports
+        if(args.length < 1) {
+            System.err.println("Das Argument muss eine gültige Portnummer zwischen 0 und 65535 sein");
+            return;
+        }
+        int port = 0;
+        try {
+            port = Integer.parseInt(args[0]);
+            if (port < 0 || port > 65535) throw new NumberFormatException();
+        } catch (NumberFormatException nfe) {
+            System.err.println("Das Argument muss eine gültige Portnummer zwischen 0 und 65535 sein");
+            return;
+        }
+        
+        //Erstellen des Security Managers
         if (System.getSecurityManager() == null) {
             System.setSecurityManager(new SecurityManager());
         }
+        
+        //Binden des Calculators / Starten des Servers
         try {
-            String name = "Compute";
+            String name = "ComputePI";
             Calculator engine = new Server();
             Calculator stub = (Calculator) UnicastRemoteObject.exportObject(engine, 0);
-            Registry registry = LocateRegistry.getRegistry();
+            Registry registry = LocateRegistry.createRegistry(port); //ev. auch nur getRegistry(port) nötig
             registry.rebind(name, stub);
-            System.out.println("ComputeEngine bound");
+            System.out.println("Server gestartet");
         } catch (Exception e) {
-            System.err.println("ComputeEngine exception:");
+            System.err.println("Server Exception:");
             e.printStackTrace();
         }
     }

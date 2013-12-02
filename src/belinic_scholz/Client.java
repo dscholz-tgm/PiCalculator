@@ -14,19 +14,34 @@ public class Client {
 
     public static void main(String args[]) {
         
-         //[2]
+        //Parsen des Ports
+        if(args.length < 3) {
+            System.err.println("Synopsis: [host] [port] [kommastellen]");
+            return;
+        }
+        int port = 0;
+        try {
+            port = Integer.parseInt(args[1]);
+            if (port < 0 || port > 65535) throw new NumberFormatException();
+        } catch (NumberFormatException nfe) {
+            System.err.println("Das Argument muss eine gültige Portnummer zwischen 0 und 65535 sein");
+            return;
+        }
+        
+       //Erstellen des Security Managers
+        //[2]
         if (System.getSecurityManager() == null) {
             System.setSecurityManager(new SecurityManager());
             //System.setProperty("java.security.policy","file:./java.policy");	//[1]
             //nicht noetig es soll mit der lokalen Policy funktionieren
         }
 
-
+        //Aufrufen des Servers / Berechnung von PI
         try {
-             String name = "Compute";
-             Registry registry = LocateRegistry.getRegistry(args[0]);
+             String name = "ComputePI";
+             Registry registry = LocateRegistry.getRegistry(args[0],port);
              Calculator comp = (Calculator) registry.lookup(name);
-             BigDecimal pi = comp.pi(Integer.parseInt(args[1]));
+             BigDecimal pi = comp.pi(Integer.parseInt(args[2]));
              System.out.println(pi);
          } catch (Exception e) {
              System.err.println("Naehere Informationen:" + e.getMessage());
