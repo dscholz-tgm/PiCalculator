@@ -14,21 +14,24 @@ public class Client {
 
     public static void main(String args[]) {
         
-        //Parsen des Ports
-        if(args.length < 3) {
-            System.err.println("Synopsis: [host] [port] [kommastellen]");
-            return;
-        }
-        int port = 0;
-        try {
-            port = Integer.parseInt(args[1]);
-            if (port < 0 || port > 65535) throw new NumberFormatException();
-        } catch (NumberFormatException nfe) {
-            System.err.println("Das Argument muss eine gültige Portnummer zwischen 0 und 65535 sein");
-            return;
-        }
+//        //Parsen des Ports
+//        if(args.length < 3) {
+//            System.err.println("Synopsis: [host] [port] [kommastellen]");
+//            return;
+//        }
+//        int port = 0;
+//        try {
+//            port = Integer.parseInt(args[1]);
+//            if (port < 0 || port > 65535) throw new NumberFormatException();
+//        } catch (NumberFormatException nfe) {
+//            System.err.println("Das Argument muss eine gueltige Portnummer zwischen 0 und 65535 sein");
+//            return;
+//        }
+    	
+    	//Verarbeiten der Optionen und Argumente
+    	MyCLI cli = new MyCLI(args);
         
-       //Erstellen des Security Managers
+        //Erstellen des Security Managers
         //[2]
         if (System.getSecurityManager() == null) {
             System.setSecurityManager(new SecurityManager());
@@ -39,9 +42,9 @@ public class Client {
         //Aufrufen des Servers / Berechnung von PI
         try {
              String name = "ComputePI";
-             Registry registry = LocateRegistry.getRegistry(args[0],port);
+             Registry registry = LocateRegistry.getRegistry(cli.getHost(),cli.getPort());
              Calculator comp = (Calculator) registry.lookup(name);
-             BigDecimal pi = comp.pi(Integer.parseInt(args[2]));
+             BigDecimal pi = comp.pi(cli.getStellen());
              System.out.println(pi);
          } catch (Exception e) {
              System.err.println("Naehere Informationen:" + e.getMessage());

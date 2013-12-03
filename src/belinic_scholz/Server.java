@@ -13,19 +13,22 @@ public class Server implements Calculator {
     
     public static void main(String args[]) {
         
-        //Parsen des Ports
-        if(args.length < 1) {
-            System.err.println("Das Argument muss eine gültige Portnummer zwischen 0 und 65535 sein");
-            return;
-        }
-        int port = 0;
-        try {
-            port = Integer.parseInt(args[0]);
-            if (port < 0 || port > 65535) throw new NumberFormatException();
-        } catch (NumberFormatException nfe) {
-            System.err.println("Das Argument muss eine gültige Portnummer zwischen 0 und 65535 sein");
-            return;
-        }
+//        //Parsen des Ports
+//        if(args.length < 1) {
+//            System.err.println("Das Argument muss eine gueltige Portnummer zwischen 0 und 65535 sein");
+//            return;
+//        }
+//        int port = 0;
+//        try {
+//            port = Integer.parseInt(args[0]);
+//            if (port < 0 || port > 65535) throw new NumberFormatException();
+//        } catch (NumberFormatException nfe) {
+//            System.err.println("Das Argument muss eine gueltige Portnummer zwischen 0 und 65535 sein");
+//            return;
+//        }
+    	
+    	//Verarbeiten der Optionen und Argumente
+    	MyCLI cli = new MyCLI(args);
         
         //Erstellen des Security Managers
         if (System.getSecurityManager() == null) {
@@ -37,7 +40,7 @@ public class Server implements Calculator {
             String name = "ComputePI";
             Calculator engine = new Server();
             Calculator stub = (Calculator) UnicastRemoteObject.exportObject(engine, 0);
-            Registry registry = LocateRegistry.createRegistry(port); //ev. auch nur getRegistry(port) nötig
+            Registry registry = LocateRegistry.createRegistry(cli.getPort()); //ev. auch nur getRegistry(cli.getPort()) noetig
             registry.rebind(name, stub);
             System.out.println("Server gestartet");
         } catch (Exception e) {
