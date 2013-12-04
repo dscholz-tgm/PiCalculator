@@ -13,21 +13,7 @@ import java.rmi.registry.Registry;
 public class Client {
 
     public static void main(String args[]) {
-        
-//        //Parsen des Ports
-//        if(args.length < 3) {
-//            System.err.println("Synopsis: [host] [port] [kommastellen]");
-//            return;
-//        }
-//        int port = 0;
-//        try {
-//            port = Integer.parseInt(args[1]);
-//            if (port < 0 || port > 65535) throw new NumberFormatException();
-//        } catch (NumberFormatException nfe) {
-//            System.err.println("Das Argument muss eine gueltige Portnummer zwischen 0 und 65535 sein");
-//            return;
-//        }
-    	
+            	
     	//Verarbeiten der Optionen und Argumente
     	MyCLI cli = new MyCLI(args);
         

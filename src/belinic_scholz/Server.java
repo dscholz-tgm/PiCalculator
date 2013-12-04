@@ -7,30 +7,16 @@ import java.rmi.server.UnicastRemoteObject;
 
 /**
  * @author Dominik
- * @version 0.2
+ * @version 0.3
  */
 public class Server implements Calculator {
     
     public static void main(String args[]) {
-        
-//        //Parsen des Ports
-//        if(args.length < 1) {
-//            System.err.println("Das Argument muss eine gueltige Portnummer zwischen 0 und 65535 sein");
-//            return;
-//        }
-//        int port = 0;
-//        try {
-//            port = Integer.parseInt(args[0]);
-//            if (port < 0 || port > 65535) throw new NumberFormatException();
-//        } catch (NumberFormatException nfe) {
-//            System.err.println("Das Argument muss eine gueltige Portnummer zwischen 0 und 65535 sein");
-//            return;
-//        }
-    	
+
     	//Verarbeiten der Optionen und Argumente
     	MyCLI cli = new MyCLI(args);
         
-        //Erstellen des Security Managers
+        //Erstellen der Security Managers
         if (System.getSecurityManager() == null) {
             System.setSecurityManager(new SecurityManager());
         }
