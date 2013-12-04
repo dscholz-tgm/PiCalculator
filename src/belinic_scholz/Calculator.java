@@ -2,6 +2,7 @@ package belinic_scholz;
 
 import java.math.BigDecimal;
 import java.rmi.Remote;
+import java.rmi.RemoteException;
 
 /**
  * Schnittstelle auf die der User zugreift
@@ -9,5 +10,5 @@ import java.rmi.Remote;
  * @version 2013-11-28
  */
 public interface Calculator extends Remote {
-    public BigDecimal pi(int anzahl_nachkommastellen);
+    public BigDecimal pi(int anzahl_nachkommastellen) throws RemoteException;
 }
