@@ -1,6 +1,5 @@
 package belinic_scholz;
 
-import java.rmi.Remote;
 import java.rmi.RemoteException;
 
 /**
@@ -8,6 +7,6 @@ import java.rmi.RemoteException;
  * @author Dominik
  * @version 0.1
  */
-public interface Balancer extends Remote {
+public interface Balancer extends Calculator {
     public int register(String host,int port) throws RemoteException;
 }

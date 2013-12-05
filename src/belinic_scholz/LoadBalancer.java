@@ -13,7 +13,7 @@ import java.util.List;
  * @author Dominik
  * @version 0.1
  */
-public class LoadBalancer implements Balancer,Calculator{
+public class LoadBalancer implements Balancer {
     
     private int count = 0;
     private List<String> hosts = new LinkedList<>();
@@ -39,11 +39,11 @@ public class LoadBalancer implements Balancer,Calculator{
         //Binden des Calculators / Starten des Servers
         try {
             LoadBalancer lb = new LoadBalancer();
-            Calculator calc = (Calculator) UnicastRemoteObject.exportObject(lb, 0);
+            //Calculator calc = (Calculator) UnicastRemoteObject.exportObject(lb, 0);
             Balancer bal = (Balancer) UnicastRemoteObject.exportObject(lb, 0);
             Registry registry = LocateRegistry.createRegistry(cli.getPort()); //ev. auch nur getRegistry(cli.getPort()) noetig
-            registry.rebind("ComputePI", calc);
-            registry.rebind("Balancer", bal);
+            registry.rebind("ComputePI", bal);
+            //registry.rebind("Balancer", bal);
             System.out.println("Server gestartet");
         } catch (RemoteException ex) {
             System.err.println("Server Exception: " + ex.getMessage());

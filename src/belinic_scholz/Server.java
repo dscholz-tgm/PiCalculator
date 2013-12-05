@@ -28,7 +28,7 @@ public class Server implements Calculator {
         if(!cli.getNameBalancer().equals("")) {
             try {
              Registry registry = LocateRegistry.getRegistry(cli.getNameBalancer(),cli.getPortBalancer());
-             Balancer bal = (Balancer) registry.lookup("Balancer");
+             Balancer bal = (Balancer) registry.lookup("ComputePI");
              int id = bal.register(InetAddress.getLocalHost().getHostAddress(), cli.getPort()); //Nicht sicher Ob das mit der Host Address funktioniert
              System.out.println("Got Server ID: " + id);
          } catch (RemoteException | NotBoundException | UnknownHostException ex) {
