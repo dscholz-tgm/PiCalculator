@@ -27,9 +27,8 @@ public class Server implements Calculator {
         
         if(!cli.getNameBalancer().equals("")) {
             try {
-             String name = "ComputePI";
              Registry registry = LocateRegistry.getRegistry(cli.getNameBalancer(),cli.getPortBalancer());
-             Balancer bal = (Balancer) registry.lookup(name);
+             Balancer bal = (Balancer) registry.lookup("Balancer");
              int id = bal.register(InetAddress.getLocalHost().getHostAddress(), cli.getPort()); //Nicht sicher Ob das mit der Host Address funktioniert
              System.out.println("Got Server ID: " + id);
          } catch (RemoteException | NotBoundException | UnknownHostException ex) {
@@ -39,11 +38,9 @@ public class Server implements Calculator {
         
         //Binden des Calculators / Starten des Servers
         try {
-            String name = "ComputePI";
-            Calculator engine = new Server();
-            Calculator stub = (Calculator) UnicastRemoteObject.exportObject(engine, 0);
+            Calculator calc = (Calculator) UnicastRemoteObject.exportObject(new Server(), 0);
             Registry registry = LocateRegistry.createRegistry(cli.getPort()); //ev. auch nur getRegistry(cli.getPort()) noetig
-            registry.rebind(name, stub);
+            registry.rebind("ComputePI", calc);
             System.out.println("Server gestartet");
         } catch (RemoteException ex) {
             System.err.println("Server Exception: " + ex.getMessage());

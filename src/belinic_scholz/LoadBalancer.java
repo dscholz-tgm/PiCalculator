@@ -38,11 +38,12 @@ public class LoadBalancer implements Balancer,Calculator{
         
         //Binden des Calculators / Starten des Servers
         try {
-            String name = "ComputePI";
-            Calculator engine = new Server();
-            Calculator stub = (Calculator) UnicastRemoteObject.exportObject(engine, 0);
+            LoadBalancer lb = new LoadBalancer();
+            Calculator calc = (Calculator) UnicastRemoteObject.exportObject(lb, 0);
+            Balancer bal = (Balancer) UnicastRemoteObject.exportObject(lb, 0);
             Registry registry = LocateRegistry.createRegistry(cli.getPort()); //ev. auch nur getRegistry(cli.getPort()) noetig
-            registry.rebind(name, stub);
+            registry.rebind("ComputePI", calc);
+            registry.rebind("Balancer", bal);
             System.out.println("Server gestartet");
         } catch (RemoteException ex) {
             System.err.println("Server Exception: " + ex.getMessage());
@@ -54,9 +55,8 @@ public class LoadBalancer implements Balancer,Calculator{
         try {
             count = count++%hosts.size();
             
-            String name = "ComputePI";
             Registry registry = LocateRegistry.getRegistry(hosts.get(count),ports.get(count));
-            Calculator comp = (Calculator) registry.lookup(name);
+            Calculator comp = (Calculator) registry.lookup("ComputePI");
             return comp.pi(anzahl_nachkommastellen);
         } catch (NotBoundException ex) {
             throw new RemoteException("NotBoundException: " + ex.getMessage());

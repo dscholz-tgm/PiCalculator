@@ -27,9 +27,8 @@ public class Client {
 
         //Aufrufen des Servers / Berechnung von PI
         try {
-             String name = "ComputePI";
              Registry registry = LocateRegistry.getRegistry(cli.getHost(),cli.getPort());
-             Calculator comp = (Calculator) registry.lookup(name);
+             Calculator comp = (Calculator) registry.lookup("ComputePI");
              BigDecimal pi = comp.pi(cli.getStellen());
              System.out.println(pi);
          } catch (Exception e) {
