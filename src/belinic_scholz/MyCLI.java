@@ -1,5 +1,7 @@
 package belinic_scholz;
 
+import java.util.List;
+
 import org.apache.commons.cli2.*;
 import org.apache.commons.cli2.builder.*;
 import org.apache.commons.cli2.commandline.Parser;
@@ -28,7 +30,29 @@ public class MyCLI {
      * Die Nachkommastellen. Langform: --stellen | Kurzform: -s
      */
     private int stellen = 3;
+    
+    /**
+     * Gehoert zur Option type (erstes Argument).
+     * Ob der User ein Client oder ein Server ist.
+     * Server = true | Client = false
+     * Standartmaessig: false
+     */
+    private boolean type = false;
+    
+    /**
+     * Gehoert zur Option type (zweites Argument).
+     * Der Port des Balancers.
+     */
+    private int portbalancer = 0;
+    
+    /**
+     * Gehoert zur Option type (drittes Argument).
+     * Der Name des Balancers.
+     */
+    private String namebalancer = "";
 
+    
+    
 	//Konstruktor(en)
     /**
      * Ueberprueft die uebergebenen Optionen und Argumente.
@@ -49,14 +73,32 @@ public class MyCLI {
                         .withMinimum(1).withMaximum(1).create()).create();
 
         Option port = obuilder.withLongName("port").withShortName("p").withRequired(false)
-                .withArgument(abuilder.withName("\n\t\tPort, dies ist der Port ueber den kommuniziert wird.\n\t\tEine Zahl zwischen 0 und 65535\n\t\tStandartmaessig: 52741\n\t\tNICHT VERPFLICHTEND\n")
+                .withArgument(abuilder.withName("\n\t\tPort, dies ist der Port ueber den kommuniziert wird.\n\t\t"
+                		+ "Eine Zahl zwischen 0 und 65535\n\t\tStandartmaessig: 52741\n\t\tNICHT VERPFLICHTEND\n")
                         .withMinimum(1).withMaximum(1).create()).create();
 
         Option stellen = obuilder.withLongName("stellen").withShortName("s").withRequired(false)
-                .withArgument(abuilder.withName("\n\t\tStellen, die Nachkommastellen von Pi.\n\t\tEine Zahl zwischen 0 und (2^31)-1\n\t\tStandartmaessig: 3\n\t\tNICHT VERPFLICHTEND\n")
+                .withArgument(abuilder.withName("\n\t\tStellen, die Nachkommastellen von Pi.\n\t\t"
+                		+ "Eine Zahl zwischen 0 und (2^31)-1\n\t\tStandartmaessig: 3\n\t\tNICHT VERPFLICHTEND\n")
                         .withMinimum(1).withMaximum(1).create()).create();
+        
+        Option type = obuilder.withLongName("type").withShortName("t").withDescription("Informationen").withRequired(true)
+                .withArgument(abuilder.withName("\n\t\tType, ob es ein Server oder ein Client ist.\n\t\t"
+                		+ "Client ... 0\n\t\tServer ... 1\n\t\tStandartmaessig: Client\n\t\tVERPFLICHTEND\n"
+                		+ "\n\t\tPortBalancer, der Port des Balancers.\n\t\t"
+                		+ "Eine Zahl zwischen 0 und 65535\n\t\tNICHT VERPFLICHTEND, ausser man benutzt einen Balancer\n"
+                		+ "\n\t\tNameBalancer, der Name des Balancers.\n\t\t"
+                		+ "NICHT VERPFLICHTEND, ausser man benutzt einen Balancer")
+                        .withMinimum(1).withMaximum(3).withInitialSeparator(('=')).withSubsequentSeparator(('-')).create())
+//                .withArgument(abuilder.withName("\n\t\tPortBalancer, der Port des Balancers.\n\t\t"
+//                		+ "Eine Zahl zwischen 0 und 65535\n\t\tNICHT VERPFLICHTEND, ausser man benutzt einen Balancer\n")
+//                        .withMinimum(1).withMaximum(1).create())
+//                .withArgument(abuilder.withName("\n\t\tNameBalancer, der Name des Balancers.\n\t\t"
+//                		+ "NICHT VERPFLICHTEND, ausser man benutzt einen Balancer\n")
+//                        .withMinimum(1).withMaximum(1).create())
+                .create();
 
-        Group options = gbuilder.withName("options").withOption(host).withOption(port).withOption(stellen).create();
+        Group options = gbuilder.withName("options").withOption(host).withOption(port).withOption(stellen).withOption(type).create();
 
         Parser parser = new Parser();
         parser.setGroup(options);
@@ -67,8 +109,8 @@ public class MyCLI {
         hf.setGroup(options);
         hf.getFullUsageSettings().remove(DisplaySetting.DISPLAY_GROUP_EXPANDED);
         hf.getDisplaySettings().remove(DisplaySetting.DISPLAY_GROUP_ARGUMENT);
-	//[3]
-        //Apache2, "Helping", aktualisiert: 2013, online verf�gbar: http://commons.apache.org/sandbox/commons-cli2/examples/ant.html, zuletzt besucht am: 22.10.2013
+        //[3]
+        //Apache2, "Helping", aktualisiert: 2013, online verfuegbar: http://commons.apache.org/sandbox/commons-cli2/examples/ant.html, zuletzt besucht am: 22.10.2013
 
         /*
          * Hier werden die Optionen und Argumente aus der args-Variable ausgelesen, und mit entsprechenden
@@ -82,7 +124,8 @@ public class MyCLI {
                     this.host = (String) cl.getValue(host);
                 } catch (Exception e) {
                     //wenn etwas beim Catsen schief geht wird die Hilfe/Beschreibung ausgegeben und das Programm beendet
-                    hf.print();
+                    System.out.print(e.getMessage() + "\n" + e.getStackTrace());
+                	hf.print();
                     System.exit(1);
                 }
             }
@@ -95,7 +138,8 @@ public class MyCLI {
                     }
                 } catch (Exception e) {
                     //wenn etwas beim Catsen schief geht wird die Hilfe/Beschreibung ausgegeben und das Programm beendet
-                    hf.print();
+                	System.out.print(e.getMessage() + "\n" + e.getStackTrace());
+                	hf.print();
                     System.exit(1);
                 }
             }
@@ -108,14 +152,36 @@ public class MyCLI {
                     }
                 } catch (Exception e) {
                     //wenn etwas beim Catsen schief geht wird die Hilfe/Beschreibung ausgegeben und das Programm beendet
-                    hf.print();
+                	System.out.print(e.getMessage() + "\n" + e.getStackTrace());
+                	hf.print();
+                    System.exit(1);
+                }
+            }
+            
+            if (cl.hasOption(type)) {
+                try {
+                    List temp = cl.getValues(type);
+                    if(temp.size() == 1 || temp.size() == 3) {this.type = (Integer.parseInt((String) temp.get(0))==0)?false:true;}
+                    if(temp.size() == 2) throw new IllegalArgumentException();
+                    if(temp.size() == 3) {
+                    	this.portbalancer = Integer.parseInt((String) temp.get(1));
+                    	if (this.portbalancer < 0 || this.portbalancer > 65535) {
+                    		throw new NumberFormatException();
+                        }
+                    	this.namebalancer = (String) temp.get(2);
+                    }
+                } catch (Exception e) {
+                    //wenn etwas beim Catsen schief geht wird die Hilfe/Beschreibung ausgegeben und das Programm beendet
+                	System.out.print(e.getMessage() + "\n" + e.getStackTrace());
+                	hf.print();
                     System.exit(1);
                 }
             }
 
         } catch (OptionException e) {
             //wenn etwas beim Verarbeiten der Optionen und argmente schief geht wird die Hilfe/Beschreibung augegeben und das Programm beendet
-            hf.print();
+        	System.out.print(e.getMessage() + "\n" + e.getStackTrace());
+        	hf.print();
             System.exit(1);
         }
     }
@@ -142,10 +208,46 @@ public class MyCLI {
     /**
      * Gibt die Stellen zurueck.
      *
-     * @return ddie Stellen
+     * @return die Stellen
      */
     public int getStellen() {
         return stellen;
+    }
+    
+    /**
+     * Gibt zurueck ob der User einen Server oder einen Client starten will.
+     *
+     * @return ob es ein Server ist
+     */
+    public boolean isServer() {
+        return type;
+    }
+    
+    /**
+     * Gibt den Port des Balnacers zurueck.
+     *
+     * @return den Port des Balancers
+     */
+    public int getPortBalancer() {
+        return portbalancer;
+    }
+    
+    /**
+     * Gibt den Namen des Balancers zurueck.
+     *
+     * @return den Namen des Balancers
+     */
+    public String getNameBalancer() {
+        return namebalancer;
+    }
+    
+    /**
+     * Gibt zurueck ob der Server einen Balancer verwendet
+     *
+     * @return ob ein Balancer verwendet wird
+     */
+    public boolean useBalancer() {
+    	return (this.namebalancer.equals("") && this.portbalancer == 0)?false:true;
     }
 
 }
