@@ -33,11 +33,10 @@ public class MyCLI {
     
     /**
      * Gehoert zur Option type (erstes Argument).
-     * Ob der User ein Client oder ein Server ist.
-     * Server = true | Client = false
-     * Standartmaessig: false
+     * Server = 1 | Client = 0 | Balancer = 2
+     * Standartmaessig: Client
      */
-    private boolean type = false;
+    private int type = 0;
     
     /**
      * Gehoert zur Option type (zweites Argument).
@@ -83,8 +82,8 @@ public class MyCLI {
                         .withMinimum(1).withMaximum(1).create()).create();
         
         Option type = obuilder.withLongName("type").withShortName("t").withDescription("Informationen").withRequired(true)
-                .withArgument(abuilder.withName("\n\t\tType, ob es ein Server oder ein Client ist.\n\t\t"
-                		+ "Client ... 0\n\t\tServer ... 1\n\t\tStandartmaessig: Client\n\t\tVERPFLICHTEND\n"
+                .withArgument(abuilder.withName("\n\t\tType, ob es ein Server, Balancer oder ein Client ist.\n\t\t"
+                		+ "Client ... 0\n\t\tServer ... 1\n\t\tBalancer ... 2\n\t\tStandartmaessig: Client\n\t\tVERPFLICHTEND\n"
                 		+ "\n\t\tPortBalancer, der Port des Balancers.\n\t\t"
                 		+ "Eine Zahl zwischen 0 und 65535\n\t\tNICHT VERPFLICHTEND, ausser man benutzt einen Balancer\n"
                 		+ "\n\t\tNameBalancer, der Name des Balancers.\n\t\t"
@@ -124,7 +123,7 @@ public class MyCLI {
                     this.host = (String) cl.getValue(host);
                 } catch (Exception e) {
                     //wenn etwas beim Catsen schief geht wird die Hilfe/Beschreibung ausgegeben und das Programm beendet
-                    System.out.print(e.getMessage() + "\n" + e.getStackTrace());
+                    //System.out.print(e.getMessage() + "\n" + e.getStackTrace());
                 	hf.print();
                     System.exit(1);
                 }
@@ -138,7 +137,7 @@ public class MyCLI {
                     }
                 } catch (Exception e) {
                     //wenn etwas beim Catsen schief geht wird die Hilfe/Beschreibung ausgegeben und das Programm beendet
-                	System.out.print(e.getMessage() + "\n" + e.getStackTrace());
+                	//System.out.print(e.getMessage() + "\n" + e.getStackTrace());
                 	hf.print();
                     System.exit(1);
                 }
@@ -152,7 +151,7 @@ public class MyCLI {
                     }
                 } catch (Exception e) {
                     //wenn etwas beim Catsen schief geht wird die Hilfe/Beschreibung ausgegeben und das Programm beendet
-                	System.out.print(e.getMessage() + "\n" + e.getStackTrace());
+                	//System.out.print(e.getMessage() + "\n" + e.getStackTrace());
                 	hf.print();
                     System.exit(1);
                 }
@@ -161,7 +160,7 @@ public class MyCLI {
             if (cl.hasOption(type)) {
                 try {
                     List temp = cl.getValues(type);
-                    if(temp.size() == 1 || temp.size() == 3) {this.type = (Integer.parseInt((String) temp.get(0))==0)?false:true;}
+                    if(temp.size() == 1 || temp.size() == 3) this.type = (Integer.parseInt((String) temp.get(0)));
                     if(temp.size() == 2) throw new IllegalArgumentException();
                     if(temp.size() == 3) {
                     	this.portbalancer = Integer.parseInt((String) temp.get(1));
@@ -172,7 +171,7 @@ public class MyCLI {
                     }
                 } catch (Exception e) {
                     //wenn etwas beim Catsen schief geht wird die Hilfe/Beschreibung ausgegeben und das Programm beendet
-                	System.out.print(e.getMessage() + "\n" + e.getStackTrace());
+                	//System.out.print(e.getMessage() + "\n" + e.getStackTrace());
                 	hf.print();
                     System.exit(1);
                 }
@@ -180,7 +179,7 @@ public class MyCLI {
 
         } catch (OptionException e) {
             //wenn etwas beim Verarbeiten der Optionen und argmente schief geht wird die Hilfe/Beschreibung augegeben und das Programm beendet
-        	System.out.print(e.getMessage() + "\n" + e.getStackTrace());
+        	//System.out.print(e.getMessage() + "\n" + e.getStackTrace());
         	hf.print();
             System.exit(1);
         }
@@ -215,11 +214,11 @@ public class MyCLI {
     }
     
     /**
-     * Gibt zurueck ob der User einen Server oder einen Client starten will.
+     * Gibt zurueck ob der User einen Server, Balancer oder einen Client starten will.
      *
-     * @return ob es ein Server ist
+     * @return was gestartet werden soll
      */
-    public boolean isServer() {
+    public int getType() {
         return type;
     }
     
