@@ -81,7 +81,7 @@ public class MyCLI {
                 		+ "Eine Zahl zwischen 0 und (2^31)-1\n\t\tStandartmaessig: 3\n\t\tNICHT VERPFLICHTEND\n")
                         .withMinimum(1).withMaximum(1).create()).create();
         
-        Option type = obuilder.withLongName("type").withShortName("t").withDescription("Informationen").withRequired(true)
+        Option type = obuilder.withLongName("type").withShortName("t").withRequired(true)
                 .withArgument(abuilder.withName("\n\t\tType, ob es ein Server, Balancer oder ein Client ist.\n\t\t"
                 		+ "Client ... 0\n\t\tServer ... 1\n\t\tBalancer ... 2\n\t\tStandartmaessig: Client\n\t\tVERPFLICHTEND\n"
                 		+ "\n\t\tPortBalancer, der Port des Balancers.\n\t\t"
