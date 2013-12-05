@@ -15,6 +15,8 @@ import java.rmi.server.UnicastRemoteObject;
  */
 public class Server implements Calculator {
     
+    private static int id = -1;
+    
     public static void main(String args[]) {
 
     	//Verarbeiten der Optionen und Argumente
@@ -29,7 +31,7 @@ public class Server implements Calculator {
             try {
              Registry registry = LocateRegistry.getRegistry(cli.getNameBalancer(),cli.getPortBalancer());
              Balancer bal = (Balancer) registry.lookup("ComputePI");
-             int id = bal.register(InetAddress.getLocalHost().getHostAddress(), cli.getPort()); //Nicht sicher Ob das mit der Host Address funktioniert
+             id = bal.register(InetAddress.getLocalHost().getHostAddress(), cli.getPort()); //Nicht sicher Ob das mit der Host Address funktioniert
              System.out.println("Got Server ID: " + id);
          } catch (RemoteException | NotBoundException | UnknownHostException ex) {
              System.err.println("Naehere Informationen:" + ex.getMessage() + "\n" + ex.getStackTrace());
@@ -49,6 +51,7 @@ public class Server implements Calculator {
 
     @Override
     public BigDecimal pi(int anzahl_nachkommastellen) {
+        System.out.println("Server " + id + ": calulating PI");
         return new CalculatorImpl().pi(anzahl_nachkommastellen);
     }
 }
