@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="PiCalculator" default="compile" basedir=".">
+
+	<property name="src.dir" value="src" />
+	<property name="build.dir" value="bin" />
+	<property name="doc.dir" value="doc" />
+	<property name="lib.dir" value="lib" />
+	
+	<path id="project.classpath">
+		<pathelement location="${build.dir}" />
+		<fileset dir="${lib.dir}">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+	
+	<target name="compile" description="Compile project.">
+		<mkdir dir="${build.dir}" />
+		<javac srcdir="${src.dir}" destdir="${build.dir}" classpathref="project.classpath" />
+	</target>
+
+	<target name="clean" description="Clean build products.">
+		<delete dir="${build.dir}" />
+	</target>
+	
+	<target name="create-doc" description="Create javadoc.">
+		<mkdir dir="${doc.dir}" />
+		<javadoc sourcepath="${src.dir}" destdir="${doc.dir}" />
+	</target>
+	
+	<target name="clean-doc" description="Clean javadoc.">
+		<delete dir="${doc.dir}" />
+	</target>
+
+	<target name="rebuild" depends="clean, compile" description="Clean and build products." />
+
+</project>
