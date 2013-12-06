@@ -68,17 +68,17 @@ public class MyCLI {
          * einer passenden Beschreibung der Option und einer passenden Beschreibung zum Argument.
          */
         Option host = obuilder.withLongName("host").withShortName("h").withRequired(true)
-                .withArgument(abuilder.withName("\n\t\tHost, hier gibt man den Namen/IP-Adr des Hosts an. \n\t\tVERPFLICHTEND\n")
+                .withArgument(abuilder.withName("\tHost, hier gibt man den Namen/IP-Adr des Hosts an. \n\t\tVERPFLICHTEND")
                         .withMinimum(1).withMaximum(1).create()).create();
 
         Option port = obuilder.withLongName("port").withShortName("p").withRequired(false)
-                .withArgument(abuilder.withName("\n\t\tPort, dies ist der Port ueber den kommuniziert wird.\n\t\t"
-                		+ "Eine Zahl zwischen 0 und 65535\n\t\tStandartmaessig: 52741\n\t\tNICHT VERPFLICHTEND\n")
+                .withArgument(abuilder.withName("\tPort, dies ist der Port ueber den kommuniziert wird.\n\t\t"
+                		+ "Eine Zahl zwischen 0 und 65535\n\t\tStandartmaessig: 52741\n\t\tNICHT VERPFLICHTEND")
                         .withMinimum(1).withMaximum(1).create()).create();
 
         Option stellen = obuilder.withLongName("stellen").withShortName("s").withRequired(false)
-                .withArgument(abuilder.withName("\n\t\tStellen, die Nachkommastellen von Pi.\n\t\t"
-                		+ "Eine Zahl zwischen 0 und (2^31)-1\n\t\tStandartmaessig: 3\n\t\tNICHT VERPFLICHTEND\n")
+                .withArgument(abuilder.withName("\tStellen, die Nachkommastellen von Pi.\n\t\t\t"
+                		+ "Eine Zahl zwischen 0 und (2^31)-1\n\t\t\tStandartmaessig: 3\n\t\t\tNICHT VERPFLICHTEND")
                         .withMinimum(1).withMaximum(1).create()).create();
         
         Option type = obuilder.withLongName("type").withShortName("t").withRequired(true)
@@ -104,10 +104,9 @@ public class MyCLI {
 
         //[3]
         HelpFormatter hf = new HelpFormatter();
-        hf.setShellCommand("RMI");
-        hf.setGroup(options);
-        hf.getFullUsageSettings().remove(DisplaySetting.DISPLAY_GROUP_EXPANDED);
-        hf.getDisplaySettings().remove(DisplaySetting.DISPLAY_GROUP_ARGUMENT);
+		hf.setShellCommand("RMI");
+		hf.setGroup(options);
+		hf.getFullUsageSettings().remove(DisplaySetting.DISPLAY_GROUP_EXPANDED);
         //[3]
         //Apache2, "Helping", aktualisiert: 2013, online verfuegbar: http://commons.apache.org/sandbox/commons-cli2/examples/ant.html, zuletzt besucht am: 22.10.2013
 

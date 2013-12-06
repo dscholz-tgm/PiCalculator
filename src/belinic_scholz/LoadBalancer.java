@@ -23,7 +23,8 @@ public class LoadBalancer implements Balancer {
     public int register(String host, int port) {
         hosts.add(host);
         ports.add(port);
-        return hosts.size();
+        System.out.println(ports.size() + "Server NEU verbunden:" + host + ":" + port);
+        return ports.size();
     }
     
     public static void main(String args[]) {
@@ -52,15 +53,25 @@ public class LoadBalancer implements Balancer {
 
     @Override
     public BigDecimal pi(int anzahl_nachkommastellen) throws RemoteException {
-        try {
-            count = count++%hosts.size();
-            
+    	Calculator comp = null;
+    	try {
+            System.out.println("Count:  " + count);
             Registry registry = LocateRegistry.getRegistry(hosts.get(count),ports.get(count));
-            Calculator comp = (Calculator) registry.lookup("ComputePI");
-            return comp.pi(anzahl_nachkommastellen);
+            comp = (Calculator) registry.lookup("ComputePI");
+            count++;
+        	count = count % ports.size();
         } catch (NotBoundException ex) {
-            throw new RemoteException("NotBoundException: " + ex.getMessage());
+            System.out.println("NotBoundException: " + ex.getMessage());
+            count++;
+        	count = count % ports.size();
         }
+//		count++;
+//    	count = count % ports.size();
+		return comp.pi(anzahl_nachkommastellen);
+    }
+    
+    public void deregister(String host, int port) {
+    	
     }
     
 }
